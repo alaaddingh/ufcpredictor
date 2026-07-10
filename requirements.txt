@@ -1,0 +1,8 @@
+requests
+fake-useragent
+jupyter
+pandas
+scikit-learn
+beautifulsoup4
+selenium
+numpy
