@@ -19,6 +19,8 @@ DEFAULT_USER_AGENT = (
 )
 
 
+
+# fake agent for scraping Fighter details
 def _build_headers():
     try:
         user_agent = UserAgent(fallback=DEFAULT_USER_AGENT)
@@ -45,6 +47,11 @@ _adapter = HTTPAdapter(max_retries=_retry, pool_maxsize=20, pool_connections=20)
 _session.mount("https://", _adapter)
 _session.mount("http://", _adapter)
 
+
+
+# Class for Fighters: Gets stats (strike accuracy, weight, height, W/L/D)
+# Uses wayback machine web archive to get time-relevant data before given fight_date
+ 
 class Fighter:
     def __init__(self, fighter_name, fight_date):
         self.fighter_name = fighter_name
@@ -55,6 +62,8 @@ class Fighter:
         self.RetrievedTimeStamp = self.GetRetrievedTimeStamp()
         self.RetrievedDate = self.GetRetrievedDate()
         self.Soup = self.GetSoup()
+
+        # Stats
         self.wins, self.losses, self.draws = self.GetWLD()
         self.height = self.GetHeightCM()
         self.weight = self.GetWeightKG()
@@ -125,6 +134,8 @@ class Fighter:
         soup = BeautifulSoup(self.Snapshot.text, 'html.parser')
         return soup
 
+
+    # stat-scraping functions
     def GetWLD(self):
         div = self.Soup.find("div", class_="c-hero__headline-suffix")
         if div:
